@@ -1240,6 +1240,9 @@
 	status = "okay";
 
 	/* USER CODE BEGIN usbh */
+	usbh_ohci: usb@482e0000 {
+		status = "okay";
+	};
 	/* USER CODE END usbh */
 };
 
