@@ -1470,7 +1470,7 @@
 	
 	panel_lvds_backlight: panel-lvds-backlight {
 		compatible = "pwm-backlight";
-		pwms = <&pwm10 0 1000000 0>;
+		pwms = <&pwm10 0 45455 0>; // 22kHz freq (45455 nsec period)
 		brightness-levels = <0 100>;
 		num-interpolated-steps = <100>;
 		default-brightness-level = <80>;
