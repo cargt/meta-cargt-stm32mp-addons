@@ -26,7 +26,7 @@
 
 / {
 	model = "STMicroelectronics custom STM32CubeMX board - openstlinux-6.6-yocto-scarthgap-mpu-v25.06.11";
-	compatible = "st,stm32mp257f-cargt-00395-00365v3", "st,stm32mp257";
+	compatible = "cargt,stm32mp257f-cargt-00395-00365v3", "st,stm32mp257";
 
 	memory@80000000 {
 		device_type = "memory";
