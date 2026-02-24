@@ -1367,7 +1367,29 @@
 / {
 	model = "Cargt STM32MP257F OSM SOM 00395 (Linux)";
 
-	
+	reg_lvds_i2c_switch: regulator-lvds-i2c-switch {
+		compatible = "regulator-fixed";
+		regulator-name = "lvds_i2c_sw";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		gpio = <&pca9555_20 15 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+		status = "okay";
+	};	
+
+	reg_lvds_vdd_00314: regulator-lvds-vdd {
+		compatible = "regulator-fixed";
+		regulator-name = "lvds_vdd";
+		regulator-min-microvolt = <3300000>; // 00314 will boost 1.8V output to 3.3V 
+		regulator-max-microvolt = <3300000>;
+		gpio = <&pca9555_20 5 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+		vin-supply = <&reg_lvds_i2c_switch>;
+		status = "okay";
+	};	
+
 	reg_pcie_pwren: regulator-pcie-pwren {
 		compatible = "regulator-fixed";
 		regulator-name = "pcie-pwren";
