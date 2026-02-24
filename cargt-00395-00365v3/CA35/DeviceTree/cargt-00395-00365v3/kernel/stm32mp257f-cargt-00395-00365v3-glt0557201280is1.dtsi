@@ -46,11 +46,6 @@
 			reg = <0>;
 			remote-endpoint = <&dsi_in>;
 		};
-
-		ltdc_ep1_out: endpoint@1 {
-			reg = <1>;
-			remote-endpoint = <&lvds_in>;
-		};
 	};
 };
 
@@ -76,6 +71,7 @@
 		port@1 {
 			reg = <1>;
 			dsi_out: endpoint {
+				data-lanes = <1 2 3 4>;
 				remote-endpoint = <&panel_in>;
 			};
 		};
@@ -84,14 +80,15 @@
 	panel@0 {
 		compatible = "globaltech,glt0557201280is1", "ilitek,ili9881c";
 		reg = <0>;
-		pinctrl-names = "default";
-		rotation = <90>;
+/*		rotation = <90>; */
 		reset-gpios = <&pca9555_20 3 GPIO_ACTIVE_LOW>;
 		backlight = <&panel_dsi_backlight>;
+		power-supply = <&scmi_v3v3>;
 		status = "okay";
 
 		port {
 			panel_in: endpoint {
+				data-lanes = <1 2 3 4>;
 				remote-endpoint = <&dsi_out>;
 			};
 		};
@@ -99,21 +96,7 @@
 };
 
 &lvds {
-	default-on;
-	vdd-supply =  <&scmi_vddcore>;
-	vdda18-supply = <&scmi_v1v8>;
-
-	ports {
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		port@0 {
-			reg = <0>;
-			lvds_in: endpoint {
-				remote-endpoint = <&ltdc_ep1_out>;
-			};
-		};
-	};	
+	status = "disabled";
 };
 
 &timers12 {
