@@ -1135,8 +1135,7 @@
 	/delete-property/dma-names;
 	uart-has-rtscts;
 	bluetooth {
- 		compatibility = "nxp,88w8987-bt";
- 		fw-init-baudrate = <3000000>;
+		compatibile = "nxp,88w8987-bt";
  	};
 	/* USER CODE END lpuart1 */
 };
