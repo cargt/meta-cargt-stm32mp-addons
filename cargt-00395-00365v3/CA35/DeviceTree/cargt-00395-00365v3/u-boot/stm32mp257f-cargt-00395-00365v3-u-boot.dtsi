@@ -51,5 +51,37 @@
 		bootph-all;
 	};
 };
+
+&sdmmc1 {
+	bootph-all;
+};
+
+&sdmmc1_pins_mx {
+	bootph-all;
+};
+
+&sdmmc1_opendrain_pins_mx {
+	bootph-all;
+};
+
+&usd_pwron_reg {
+	bootph-all;
+};
+
+&usd_pwron_reg_pins {
+	bootph-all;
+};
+
+&gpiod {
+	bootph-all;
+};
+
+&scmi_regu {
+	bootph-all;
+};
+
+&scmi_vddio1 {
+	bootph-all;
+};
 /* USER CODE END addons */
 
