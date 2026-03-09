@@ -93,6 +93,7 @@
 	default-on;
 	vdd-supply =  <&scmi_vddcore>;
 	vdda18-supply = <&scmi_v1v8>;
+	status = "okay";
 
 	ports {
 		#address-cells = <1>;
@@ -117,6 +118,7 @@
 &ltdc {
 	default-on;
 	rotation-memory = <&ltdc_sec_rotation>;
+	status = "okay";
 
 	port {
 		#address-cells = <1>;

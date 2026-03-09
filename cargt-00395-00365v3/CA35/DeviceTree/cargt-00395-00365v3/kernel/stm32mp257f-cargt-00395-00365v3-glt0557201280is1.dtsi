@@ -37,6 +37,7 @@
 &ltdc {
 	default-on;
 	rotation-memory = <&ltdc_sec_rotation>;
+	status = "okay";
 
 	port {
 		#address-cells = <1>;
