@@ -972,13 +972,13 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 		compatible = "snps,dwmac-mdio";
-		phy1_eth2: ethernet-phy@1 {
+		phy1_eth2: ethernet-phy@0 {
 			compatible = "ethernet-phy-id001c.c916";
 			reset-gpios =  <&pca9555_20 1 GPIO_ACTIVE_LOW>;
 			reset-assert-us = <10000>;
 			reset-deassert-us = <80000>;
 			realtek,eee-disable;
-			reg = <1>;
+			reg = <0>;
 		};
 	};	
 	/* USER CODE END eth2 */
