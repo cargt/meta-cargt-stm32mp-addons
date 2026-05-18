@@ -855,6 +855,27 @@
 		};
 	};
 
+	spi8_pins_z_mx: spi8_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('Z', 5, AF3)>, /* SPI8_SCK */
+					 <STM32_PINMUX('Z', 6, AF3)>, /* SPI8_NSS */
+					 <STM32_PINMUX('Z', 7, AF3)>, /* SPI8_MOSI */
+					 <STM32_PINMUX('Z', 8, AF3)>; /* SPI8_MISO */
+			bias-disable;
+			drive-push-pull;
+			slew-rate = <0>;
+		};
+	};
+
+	spi8_sleep_pins_z_mx: spi8_sleep_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('Z', 5, ANALOG)>, /* SPI8_SCK */
+					 <STM32_PINMUX('Z', 6, ANALOG)>, /* SPI8_NSS */
+					 <STM32_PINMUX('Z', 7, ANALOG)>, /* SPI8_MOSI */
+					 <STM32_PINMUX('Z', 8, ANALOG)>; /* SPI8_MISO */
+		};
+	};
+
 	/* USER CODE BEGIN pinctrl_z */
 	/* USER CODE END pinctrl_z */
 };
@@ -1178,7 +1199,8 @@
 	/delete-property/dma-names;
 	uart-has-rtscts;
 	bluetooth {
-		compatibile = "nxp,88w8987-bt";
+		compatible = "nxp,88w8987-bt";
+		fw-init-baudrate = <115200>;
  	};
 	/* USER CODE END lpuart1 */
 };
@@ -1286,6 +1308,21 @@
 		interrupt-names = "host-wake";
 	};
 	/* USER CODE END sdmmc3 */
+};
+
+&spi8 {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&spi8_pins_z_mx>;
+	pinctrl-1 = <&spi8_sleep_pins_z_mx>;
+	status = "okay";
+
+	spidev@0 {
+        compatible = "rohm,dh2228fv";
+		reg = <0>;
+		pinctrl-names = "default";
+		spi-max-frequency = <1000000>;
+		status = "okay";
+	};
 };
 
 &spi4 {
