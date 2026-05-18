@@ -84,6 +84,11 @@
 		regulator-always-on;
 		status = "okay";
 	};
+
+	config {
+		u-boot,mmc-env-partition = "u-boot-env";
+	};
+
 	/* USER CODE END root */
 
 	clocks{
