@@ -24,7 +24,7 @@
 		reset-gpios = <&pca9555_20 10 GPIO_ACTIVE_LOW>;
 		touchscreen-size-x = <240>;
 		touchscreen-size-y = <320>;
-		touchscreen-inverted-y;
+		touchscreen-inverted-x;
 		wakeup-source;
 		status = "okay";
 	};
