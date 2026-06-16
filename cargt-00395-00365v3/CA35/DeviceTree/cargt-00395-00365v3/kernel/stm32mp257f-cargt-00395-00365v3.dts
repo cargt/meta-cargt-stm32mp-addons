@@ -944,6 +944,16 @@
 	/* USER CODE END dsi */
 };
 
+&bsec {
+	mac0_otp: mac0_otp@3dc {
+		reg = <0x3dc 0x6>;
+	};
+
+	mac1_otp: mac1_otp@3e2 {
+		reg = <0x3e2 0x6>;
+	};
+};
+
 &eth1 {
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&eth1_mdio_pins_mx>, <&eth1_rgmii_pins_mx>;
@@ -955,6 +965,8 @@
 	phy-mode = "rgmii-id";
 	max-speed = <1000>;
 	phy-handle = <&phy1_eth1>;
+	nvmem-cells = <&mac0_otp>;
+	nvmem-cell-names = "mac-address";
 	st,eth-ptp-from-rcc;
 	st,eth-clk-sel;
 	snps,ext-systime;
@@ -985,6 +997,8 @@
 	phy-mode = "rgmii-id";
 	max-speed = <1000>;
 	phy-handle = <&phy1_eth2>;
+	nvmem-cells = <&mac1_otp>;
+	nvmem-cell-names = "mac-address";
 	st,eth-ptp-from-rcc;
 	st,eth-clk-sel;
 	snps,ext-systime;
