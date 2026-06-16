@@ -1214,7 +1214,7 @@
 	uart-has-rtscts;
 	bluetooth {
 		compatible = "nxp,88w8987-bt";
-		fw-init-baudrate = <115200>;
+		fw-init-baudrate = <3000000>;
  	};
 	/* USER CODE END lpuart1 */
 };
