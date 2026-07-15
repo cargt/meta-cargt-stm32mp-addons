@@ -39,10 +39,10 @@
 	/* USER CODE BEGIN root */
 	aliases {
 		serial0 = &usart2;
-		serial1 = &usart6;
-		serial2 = &usart1;
 		ethernet0 = &eth1;
 		ethernet1 = &eth2;
+		mmc0 = &sdmmc1;
+		mmc1 = &sdmmc2;
 	};
 
 	chosen {
@@ -83,10 +83,6 @@
 		enable-active-high;
 		regulator-always-on;
 		status = "okay";
-	};
-
-	config {
-		u-boot,mmc-env-partition = "u-boot-env";
 	};
 
 	/* USER CODE END root */
