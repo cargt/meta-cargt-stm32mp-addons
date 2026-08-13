@@ -366,8 +366,8 @@
 
 	i2c3_pins_mx: i2c3_mx-0 {
 		pins {
-			pinmux = <STM32_PINMUX('G', 1, AF10)>, /* I2C3_SCL */
-					 <STM32_PINMUX('G', 2, AF10)>; /* I2C3_SDA */
+			pinmux = <STM32_PINMUX('G', 1, AF9)>, /* I2C3_SCL */
+					 <STM32_PINMUX('G', 2, AF9)>; /* I2C3_SDA */
 			bias-disable;
 			drive-open-drain;
 			slew-rate = <0>;
@@ -1079,6 +1079,46 @@
 	/delete-property/dmas;
 	/delete-property/dma-names;
 
+	rtc_i2c: rtc@32 {
+		compatible ="epson,rx8111";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_rtc>;
+		interrupt-parent = <&gpiob>;
+        interrupts = <10 GPIO_ACTIVE_LOW>;
+		reg = <0x32>;
+	};
+
+	eeprom@50 {
+		compatible = "atmel,24c02";
+		reg = <0x50>;
+		pagesize = <16>;
+		status = "okay";
+	};
+
+	/* USER CODE END i2c1 */
+};
+
+&i2c2 {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&i2c2_pins_mx>;
+	pinctrl-1 = <&i2c2_sleep_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN i2c2 */
+	/* USER CODE END i2c2 */
+};
+
+&i2c3 {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&i2c3_pins_mx>;
+	pinctrl-1 = <&i2c3_sleep_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN i2c3 */
+	i2c-scl-rising-time-ns = <1000>;
+	i2c-scl-falling-time-ns = <300>;
+	clock-frequency = <100000>;
+
 	pca9555_20: pca9555@20 {
 		compatible = "nxp,pca9555";
 		gpio-controller;
@@ -1157,42 +1197,6 @@
 				link-frequencies = /bits/ 64 <594000000>;
 			};
 		};
-	};
-
-	/* USER CODE END i2c1 */
-};
-
-&i2c2 {
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&i2c2_pins_mx>;
-	pinctrl-1 = <&i2c2_sleep_pins_mx>;
-	status = "okay";
-
-	/* USER CODE BEGIN i2c2 */
-	/* USER CODE END i2c2 */
-};
-
-&i2c3 {
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&i2c3_pins_mx>;
-	pinctrl-1 = <&i2c3_sleep_pins_mx>;
-	status = "okay";
-
-	/* USER CODE BEGIN i2c3 */
-	rtc_i2c: rtc@32 {
-		compatible ="epson,rx8111";
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_rtc>;
-		interrupt-parent = <&gpiob>;
-        interrupts = <10 GPIO_ACTIVE_LOW>;
-		reg = <0x32>;
-	};
-
-	eeprom@50 {
-		compatible = "atmel,24c02";
-		reg = <0x50>;
-		pagesize = <16>;
-		status = "okay";
 	};
 	/* USER CODE END i2c3 */
 };
