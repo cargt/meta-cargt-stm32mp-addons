@@ -91,7 +91,7 @@
 		regulator-name = "WLAN_EN";
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
-		gpio = <&gpiob 1 GPIO_ACTIVE_HIGH>;
+		gpio = <&gpiog 8 GPIO_ACTIVE_HIGH>;
 		startup-delay-us = <20000>;
 		enable-active-high;
 	};
@@ -590,31 +590,6 @@
 					 <STM32_PINMUX('D', 7, ANALOG)>; /* SPI4_SCK */
 		};
 	};
-
-	spi3_pins_mx: spi3_mx-0 {
-		pins1 {
-			pinmux = <STM32_PINMUX('B', 1, AF2)>, /* SPI3_NSS */
-					 <STM32_PINMUX('B', 7, AF1)>, /* SPI3_SCK */
-					 <STM32_PINMUX('B', 8, AF1)>; /* SPI3_MOSI */
-			bias-disable;
-			drive-push-pull;
-			slew-rate = <0>;
-		};
-		pins2 {
-			pinmux = <STM32_PINMUX('B', 10, AF1)>; /* SPI3_MISO */
-			bias-disable;
-		};
-	};
-
-	spi3_sleep_pins_mx: spi3_sleep_mx-0 {
-		pins {
-			pinmux = <STM32_PINMUX('B', 1, ANALOG)>, /* SPI3_NSS */
-					 <STM32_PINMUX('B', 7, ANALOG)>, /* SPI3_SCK */
-					 <STM32_PINMUX('B', 8, ANALOG)>, /* SPI3_MOSI */
-					 <STM32_PINMUX('B', 10, ANALOG)>; /* SPI3_MISO */
-		};
-	};
-
 
 	fdcan1_pins_mx: fdcan1_mx-0 {
 		pins1 {
@@ -1350,18 +1325,12 @@
 };
 
 &spi3 {
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&spi3_pins_mx>;
-	pinctrl-1 = <&spi3_sleep_pins_mx>;
-	status = "okay";
+	status = "disabled";
 
-	spidev@0 {
-        compatible = "rohm,dh2228fv";
-		reg = <0>;
-		pinctrl-names = "default";
-		spi-max-frequency = <1000000>;
-		status = "okay";
-	};
+	/* USER CODE BEGIN spi3 */
+	/* SPI3 pins (PB1/PB7/PB8/PB10) are looped back off-board on this
+	 * revision and reassigned as BOARD_ID0-3 strapping inputs. */
+	/* USER CODE END spi3 */
 };
 
 &spi4 {
