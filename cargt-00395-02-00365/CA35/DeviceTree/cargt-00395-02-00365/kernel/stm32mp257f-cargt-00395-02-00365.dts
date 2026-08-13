@@ -1173,6 +1173,7 @@
 			};
 		};
 	};
+
 	/* USER CODE END i2c3 */
 };
 
@@ -1249,6 +1250,7 @@
 	status = "okay";
 
 	/* USER CODE BEGIN pcie_rc */
+	power-supply = <&reg_pcie_pwren>;
 	reset-gpios = <&gpioa 12 GPIO_ACTIVE_LOW>;
 	wakeup-source;
 	wake-gpios = <&gpiod 8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
@@ -1311,16 +1313,6 @@
 	vmmc-supply = <&reg_sdmmc3_vmmc>;
 	cap-power-off-card;
 	keep-power-in-suspend;
-
-	#address-cells = <1>;
-	#size-cells = <0>;
-
-	wifi_wake_host {
-		compatible = "nxp,wifi-wake-host";
-		interrupt-parent = <&gpiod>;
-		interrupts = <8 IRQ_TYPE_LEVEL_LOW>;
-		interrupt-names = "host-wake";
-	};
 	/* USER CODE END sdmmc3 */
 };
 
