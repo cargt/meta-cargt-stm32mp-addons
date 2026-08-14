@@ -30,9 +30,9 @@ part u-boot-env --source empty --part-name=uboot-env --ondisk mmcblk --part-type
 part bootfs --source rawcopy --sourceparams="file=st-image-bootfs-${DISTRO}-${MACHINE}.bootfs.ext4" --ondisk mmcblk --fstype=ext4 --label bootfs --active --fixed-size 64M
 # Vendorfs
 part vendorfs --source rawcopy --sourceparams="file=st-image-vendorfs-${DISTRO}-${MACHINE}.vendorfs.ext4" --ondisk mmcblk --fstype=ext4 --label vendorfs --fixed-size 250M
+# Rootfs
+part / --source rootfs --ondisk mmcblk --fstype=ext4 --label rootfs --uuid e91c4e10-16e6-4c0e-bd0e-77becf4a3582
 # Userfs
 part userfs --source rawcopy --sourceparams="file=st-image-userfs-${DISTRO}-${MACHINE}.userfs.ext4" --ondisk mmcblk --fstype=ext4 --label userfs --fixed-size 200M
-# Rootfs (kept last on disk so it can be grown to fill the card on first boot)
-part / --source rootfs --ondisk mmcblk --fstype=ext4 --label rootfs --uuid e91c4e10-16e6-4c0e-bd0e-77becf4a3582
 
 bootloader --ptable gpt
