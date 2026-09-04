@@ -1104,6 +1104,17 @@
 			"pca9555_20-4",	"pca9555_20-5",	"pca9555_20-6",	"pca9555_20-7",		// 4-7
 			"pca9555_20-8",	"pca9555_20-9",	"pca9555_20-10","pca9555_20-11", 	// 8-11
 			"pca9555_20-12","pca9555_20-13","pca9555_20-14","pca9555_20-15"; 	// 12-15
+
+		/* eth2's PHY (address 1 on eth0's shared MDIO bus) is unused by
+		 * design. Hold its reset asserted permanently to keep it
+		 * electrically silent on the shared MDIO/MDC bus; left un-reset,
+		 * it intermittently corrupts eth0's PHY resets on that shared bus. */
+		eth2-phy-reset-hog {
+			gpio-hog;
+			gpios = <2 GPIO_ACTIVE_LOW>;
+			output-high;
+			line-name = "eth2-phy-reset-hog";
+		};
 	};
 
 	ptn5110_51: tcpc@51 {
