@@ -1101,7 +1101,7 @@
 		reg = <0x51>;
 		pinctrl-0 = <&ptn5110_51_pins>;
 		interrupt-parent = <&gpiog>;
-		interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
+		interrupts = <15 IRQ_TYPE_LEVEL_LOW>;
 		status = "okay";
 
 		usbc_a_con: connector {
@@ -1130,7 +1130,7 @@
 		reg = <0x52>;
 		pinctrl-0 = <&ptn5110_52_pins>;
 		interrupt-parent = <&gpiob>;
-		interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
+		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
 		status = "okay";
 
 		usbc_c_con: connector {
