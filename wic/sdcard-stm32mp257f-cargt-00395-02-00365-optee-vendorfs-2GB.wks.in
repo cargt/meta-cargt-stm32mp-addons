@@ -1,12 +1,12 @@
 # short-description: Create SD card image with a boot partition (1GB)
 # long-description: Creates a partitioned SD card image (1GB)
 #
-# --------------------------------------------------------------------------------------------
-# | | TFA(2) | Metadata(2) | FIPA | FIPB | U-BOOT ENV | bootfs | vendorfs | rootfs  | userfs |
-# --------------------------------------------------------------------------------------------
-# ^ ^        ^             ^      ^      ^            ^        ^          ^         ^        ^
-# | |        |             |      |      |            |        |          |         |        |
-# 0 17kB    542kB        1.06MB  5.26MB 9.45MB      9.97MB    77.1MB    93.9Mb    939MB    1073MB
+# ---------------------------------------------------------------------------------------------------------------------------------
+# | | TFA(2) | Metadata(2) | FIPA | FIPB | U-BOOT ENV | bootfs-a | bootfs-b | vendorfs-a | vendorfs-b | rootfs-a | rootfs-b | userfs |
+# ---------------------------------------------------------------------------------------------------------------------------------
+#
+# bootfs/vendorfs/rootfs are duplicated A/B slots for RAUC OTA updates. The "-b" slot of
+# each starts empty and is populated by the first `rauc install`. userfs is shared/not A/B.
 #
 # Warning: the first stage of boot (here fsbl1, fsbl2, metadata1, metadata2, fipa, fipb) MUST be on GPT partition to be detected.
 #
@@ -24,15 +24,22 @@ part fip-a   --source rawcopy --fstype=ext4 --fsoptions "noauto" --part-name=fip
 part fip-b   --source rawcopy --fstype=ext4 --fsoptions "noauto" --part-name=fip-b --sourceparams="file=${DEPLOY_DIR_IMAGE}/fip/fip-stm32mp257f-cargt-00395-02-00365-optee-sdcard.bin" --ondisk mmcblk --part-type 19d5df83-11b0-457b-be2c-7559c13142a5 --fixed-size 4096K --uuid 09c54952-d5bf-45af-acee-335303766fb3
 
 # U-BOOT env
-part u-boot-env --source empty --part-name=uboot-env --ondisk mmcblk --part-type 0x8301 --fixed-size 512K
+part u-boot-env --source empty --part-name=u-boot-env --ondisk mmcblk --part-type 0x8301 --fixed-size 512K
 
-# Bootfs
-part bootfs --source rawcopy --sourceparams="file=st-image-bootfs-${DISTRO}-${MACHINE}.bootfs.ext4" --ondisk mmcblk --fstype=ext4 --label bootfs --active --fixed-size 64M
-# Vendorfs
-part vendorfs --source rawcopy --sourceparams="file=st-image-vendorfs-${DISTRO}-${MACHINE}.vendorfs.ext4" --ondisk mmcblk --fstype=ext4 --label vendorfs --fixed-size 250M
-# Rootfs
-part / --source rootfs --ondisk mmcblk --fstype=ext4 --label rootfs --uuid e91c4e10-16e6-4c0e-bd0e-77becf4a3582
-# Userfs
+# Bootfs (A/B - RAUC slot). "B" starts empty; populated by the first OTA install.
+part bootfs-a --source rawcopy --sourceparams="file=st-image-bootfs-${DISTRO}-${MACHINE}.bootfs.ext4" --ondisk mmcblk --fstype=ext4 --label bootfs-a --active --fixed-size 64M
+part bootfs-b --source empty --ondisk mmcblk --fstype=ext4 --label bootfs-b --fixed-size 64M
+# Vendorfs (A/B - RAUC slot). "B" starts empty; populated by the first OTA install.
+part vendorfs-a --source rawcopy --sourceparams="file=st-image-vendorfs-${DISTRO}-${MACHINE}.vendorfs.ext4" --ondisk mmcblk --fstype=ext4 --label vendorfs-a --fixed-size 250M
+part vendorfs-b --source empty --ondisk mmcblk --fstype=ext4 --label vendorfs-b --fixed-size 250M
+# Rootfs (A/B - RAUC slot). "A" is the default configuration in build; "B"
+# starts empty. root= is a literal /dev/mmcblkNpM path (see
+# UBOOT_EXTLINUX_ROOT in the machine conf) - neither PARTLABEL nor
+# PARTUUID work here, since both eMMC and SD card carry a partition
+# named "rootfs-a" - so no fixed UUID needs forcing here.
+part rootfs-a --source rootfs --ondisk mmcblk --fstype=ext4 --label rootfs-a
+part rootfs-b --source empty --ondisk mmcblk --fstype=ext4 --label rootfs-b --fixed-size 3G
+# Userfs (shared - not duplicated for A/B)
 part userfs --source rawcopy --sourceparams="file=st-image-userfs-${DISTRO}-${MACHINE}.userfs.ext4" --ondisk mmcblk --fstype=ext4 --label userfs --fixed-size 200M
 
 bootloader --ptable gpt
