@@ -24,13 +24,19 @@ part fip-a   --source rawcopy --fstype=ext4 --fsoptions "noauto" --part-name=fip
 part fip-b   --source rawcopy --fstype=ext4 --fsoptions "noauto" --part-name=fip-b --sourceparams="file=${DEPLOY_DIR_IMAGE}/fip/fip-stm32mp257f-cargt-00395-02-00365-optee-sdcard.bin" --ondisk mmcblk --part-type 19d5df83-11b0-457b-be2c-7559c13142a5 --fixed-size 4096K --uuid 09c54952-d5bf-45af-acee-335303766fb3
 
 # U-BOOT env
-part u-boot-env --source empty --part-name=uboot-env --ondisk mmcblk --part-type 0x8301 --fixed-size 512K
+part u-boot-env --source empty --part-name=u-boot-env --ondisk mmcblk --part-type 0x8301 --fixed-size 512K
 
-# Bootfs
-part bootfs --source rawcopy --sourceparams="file=st-image-bootfs-${DISTRO}-${MACHINE}.bootfs.ext4" --ondisk mmcblk --fstype=ext4 --label bootfs --active --fixed-size 64M
-# Rootfs
-part / --source rootfs --ondisk mmcblk --fstype=ext4 --label rootfs --uuid e91c4e10-16e6-4c0e-bd0e-77becf4a3582
-# Userfs
+# Bootfs (A/B - RAUC slot). "B" starts empty; populated by the first OTA install.
+part bootfs-a --source rawcopy --sourceparams="file=st-image-bootfs-${DISTRO}-${MACHINE}.bootfs.ext4" --ondisk mmcblk --fstype=ext4 --label bootfs-a --active --fixed-size 64M
+part bootfs-b --source empty --ondisk mmcblk --fstype=ext4 --label bootfs-b --fixed-size 64M
+# Rootfs (A/B - RAUC slot). "A" is the default configuration in build; "B"
+# starts empty. root= is a literal /dev/mmcblkNpM path (see
+# UBOOT_EXTLINUX_ROOT in the machine conf) - neither PARTLABEL nor
+# PARTUUID work here, since both eMMC and SD card carry a partition
+# named "rootfs-a" - so no fixed UUID needs forcing here.
+part rootfs-a --source rootfs --ondisk mmcblk --fstype=ext4 --label rootfs-a
+part rootfs-b --source empty --ondisk mmcblk --fstype=ext4 --label rootfs-b --fixed-size 3G
+# Userfs (shared - not duplicated for A/B)
 part userfs --source rawcopy --sourceparams="file=st-image-userfs-${DISTRO}-${MACHINE}.userfs.ext4" --ondisk mmcblk --fstype=ext4 --label userfs --fixed-size 256M
 
 bootloader --ptable gpt
