@@ -27,7 +27,7 @@
 		pinctrl-0 = <&pinctrl_dsi_touchscreen>;
 		reset-gpios = <&pca9555_20 4 GPIO_ACTIVE_LOW>;
 		interrupt-parent = <&gpiob>;
-		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+		interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
 		touchscreen-swapped-x-y;
 		touchscreen-inverted-x;
 		wakeup-source;
