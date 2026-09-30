@@ -99,7 +99,19 @@
 		MUX_CFG(MUX_USB3PCIEPHY, MUX_USB3PCIEPHY_FLEX34)
 		MUX_CFG(MUX_DSIPHY, MUX_DSIPHY_FLEX28)
 		MUX_CFG(MUX_DSIBLANE, MUX_DSIBLANE_DSIPHY)
-
+		/*
+		 * RTCSRC (RCC_BDCR[17:16]) is never set elsewhere, so it
+		 * stays at its reset default of "no clock selected" - RTC_CK
+		 * never ticks and RTC_ICSR_RSF can never set. This is the
+		 * root cause of poweroff resetting via IWDG instead of
+		 * powering off (stm32-stgen's suspend/resume callbacks read
+		 * the RTC calendar and hang/fail waiting on that flag).
+		 * clk_lse is already configured above; just needed to be
+		 * selected as the RTC clock source. Confirmed on hardware
+		 * (RCC_BDCR RTCSRC=0, RTC_SSR frozen) and matches ST's own
+		 * mp2som reference DT.
+		 */
+		MUX_CFG(MUX_RTC, MUX_RTC_LSE)
 	>;
 
 	pll1:st,pll-1 {
