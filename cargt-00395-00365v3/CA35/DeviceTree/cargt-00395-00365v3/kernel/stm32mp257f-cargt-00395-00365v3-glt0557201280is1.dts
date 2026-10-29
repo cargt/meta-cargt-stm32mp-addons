@@ -12,4 +12,5 @@
  
 / {
 	model = "Cargt STM32MP257F SOM (00395) on 00365v3 with 5.5 inch MIPI DSI Display (GLT0557201280IS1)";
+	compatible = "cargt,stm32mp257f-cargt-00395-00365v3-glt0557201280is1", "cargt,stm32mp257f-cargt-00395-00365v3", "st,stm32mp257";
 };

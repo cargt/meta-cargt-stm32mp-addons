@@ -12,4 +12,5 @@
  
 / {
 	model = "Cargt STM32MP257F SOM (00395-01) on 00365 with 7-in LVDS Display(GLT0701024600IS2-CTP)";
+	compatible = "cargt,stm32mp257f-cargt-00395-01-00365-glt0701024600is2", "cargt,stm32mp257f-cargt-00395-01-00365", "st,stm32mp257";
 };

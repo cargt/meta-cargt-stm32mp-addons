@@ -1,1 +1,12 @@
-./stm32mp257f-cargt-00395-00365v3.dts
+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+/*
+ * Per-panel U-Boot devicetree: the board devicetree plus a panel-specific
+ * first compatible. U-Boot's board_late_init() turns that compatible into
+ * fdtfile, so Linux boots the kernel devicetree of the same name.
+ */
+
+#include "stm32mp257f-cargt-00395-00365v3.dts"
+
+/ {
+	compatible = "cargt,stm32mp257f-cargt-00395-00365v3-glt028240320is1", "cargt,stm32mp257f-cargt-00395-00365v3", "st,stm32mp257";
+};
