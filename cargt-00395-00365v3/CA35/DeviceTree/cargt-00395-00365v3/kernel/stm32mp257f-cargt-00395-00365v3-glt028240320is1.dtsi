@@ -21,7 +21,7 @@
 		pinctrl-0 = <&pinctrl_spi_touchscreen>;
 		interrupt-parent = <&gpiog>;
 		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
-		reset-gpios = <&pca9555_20 10 GPIO_ACTIVE_LOW>;
+		/* No reset-gpios: TPRST is on mikroBUS RX, an input-only line on the 00365 */
 		touchscreen-size-x = <240>;
 		touchscreen-size-y = <320>;
 		touchscreen-inverted-x;
