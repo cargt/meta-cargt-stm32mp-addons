@@ -11,7 +11,7 @@
 	};
 };
 
-&i2c1 {
+&i2c3 {	/* the 00365 I2C_A (mikroBUS SCL/SDA, pca9555_20) on the 00395-02 */
 	status = "okay";
 
 	focaltech_touch: touchscreen@38 {
