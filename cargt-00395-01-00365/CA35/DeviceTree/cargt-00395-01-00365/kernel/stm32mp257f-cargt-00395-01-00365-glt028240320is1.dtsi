@@ -24,7 +24,8 @@
 		/* No reset-gpios: TPRST is on mikroBUS RX, an input-only line on the 00365 */
 		touchscreen-size-x = <240>;
 		touchscreen-size-y = <320>;
-		touchscreen-inverted-x;
+		touchscreen-inverted-y;
+		touchscreen-swapped-x-y; /* the panel runs landscape (320x240) */
 		wakeup-source;
 		status = "okay";
 	};
