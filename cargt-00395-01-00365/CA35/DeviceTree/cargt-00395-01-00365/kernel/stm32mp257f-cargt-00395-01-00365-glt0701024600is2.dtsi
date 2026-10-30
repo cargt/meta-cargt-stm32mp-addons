@@ -1,7 +1,7 @@
 / {
 	panel_lvds_backlight: panel-lvds-backlight {
 		compatible = "pwm-backlight";
-		pwms = <&pwm10 0 1000000 0>;
+		pwms = <&pwm10 0 45455 0>; /* 22 kHz: no visible flicker when dimmed */
 		brightness-levels = <0 100>;
 		num-interpolated-steps = <100>;
 		default-brightness-level = <80>;
