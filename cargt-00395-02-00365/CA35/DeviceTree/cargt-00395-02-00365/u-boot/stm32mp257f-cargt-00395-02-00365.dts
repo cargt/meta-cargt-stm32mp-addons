@@ -55,9 +55,9 @@
 	reg_pcie_pwren: regulator-pcie-pwren {
 		compatible = "regulator-fixed";
 		regulator-name = "pcie-pwren";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		gpio = <&pca9555_20 8 GPIO_ACTIVE_HIGH>;
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		gpio = <&pca9555_20 9 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 		regulator-always-on;
 		status = "okay";
@@ -311,6 +311,23 @@
 		pins {
 			pinmux = <STM32_PINMUX('B', 4, ANALOG)>, /* I2C2_SDA */
 					 <STM32_PINMUX('B', 5, ANALOG)>; /* I2C2_SCL */
+		};
+	};
+
+	i2c3_pins_mx: i2c3_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('G', 1, AF9)>, /* I2C3_SCL */
+					 <STM32_PINMUX('G', 2, AF9)>; /* I2C3_SDA */
+			bias-disable;
+			drive-open-drain;
+			slew-rate = <0>;
+		};
+	};
+
+	i2c3_sleep_pins_mx: i2c3_sleep_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('G', 1, ANALOG)>, /* I2C3_SCL */
+					 <STM32_PINMUX('G', 2, ANALOG)>; /* I2C3_SDA */
 		};
 	};
 
@@ -849,72 +866,12 @@
 	/delete-property/dmas;
 	/delete-property/dma-names;
 
-	pca9555_20: pca9555@20 {
-		compatible = "nxp,pca9555";
-		gpio-controller;
-		#gpio-cells = <2>;
-		reg = <0x20>;
-		gpio-line-names =
-			"pca9555_20-0",	"pca9555_20-1",	"pca9555_20-2",	"pca9555_20-3", 	// 0-3
-			"pca9555_20-4",	"pca9555_20-5",	"pca9555_20-6",	"pca9555_20-7",		// 4-7
-			"pca9555_20-8",	"pca9555_20-9",	"pca9555_20-10","pca9555_20-11", 	// 8-11
-			"pca9555_20-12","pca9555_20-13","pca9555_20-14","pca9555_20-15"; 	// 12-15		
-	};
-
 	eeprom@50 {
 		compatible = "atmel,24c02";
 		reg = <0x50>;
 		pagesize = <16>;		
 		status = "okay";
 	};
-
-	ptn5110_51: tcpc@51 {
-		compatible = "nxp,ptn5110";
-		reg = <0x51>;
-		pinctrl-0 = <&ptn5110_51_pins>;
-		interrupt-parent = <&gpiog>;
-		interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
-		status = "okay";
-
-		usbc_a_con: connector {
-			compatible = "usb-c-connector";
-			label = "USB-C(A)";
-			power-role = "dual";
-			data-role = "dual";
-			try-power-role = "sink";
-			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
-			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
-				     PDO_VAR(5000, 20000, 3000)>;
-			op-sink-microwatt = <15000000>;
-			self-powered;
-			status = "okay";
-
-			port {
-				typec_a_ep: endpoint {
-					remote-endpoint = <&dwc3_ep>;
-				};
-			};
-		};
-	};
-
-	ptn5110_52: tcpc@52 {
-		compatible = "nxp,ptn5110";
-		reg = <0x52>;
-		pinctrl-0 = <&ptn5110_52_pins>;
-		interrupt-parent = <&gpiob>;
-		interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
-		status = "okay";
-
-		usbc_c_con: connector {
-			compatible = "usb-c-connector";
-			label = "USB-C(C)";
-			power-role = "source";
-			data-role = "host";
-			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
-			self-powered;
-			status = "okay";
-		};
-	};	
 	/* USER CODE END i2c1 */
 };
 
@@ -987,6 +944,90 @@
 */
 
 	/* USER CODE END i2c2 */
+};
+
+&i2c3 {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&i2c3_pins_mx>;
+	pinctrl-1 = <&i2c3_sleep_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN i2c3 */
+	i2c-scl-rising-time-ns = <1000>;
+	i2c-scl-falling-time-ns = <300>;
+	clock-frequency = <100000>;
+
+	pca9555_20: pca9555@20 {
+		compatible = "nxp,pca9555";
+		gpio-controller;
+		#gpio-cells = <2>;
+		reg = <0x20>;
+		gpio-line-names =
+			"pca9555_20-0",	"pca9555_20-1",	"pca9555_20-2",	"pca9555_20-3", 	// 0-3
+			"pca9555_20-4",	"pca9555_20-5",	"pca9555_20-6",	"pca9555_20-7",		// 4-7
+			"UBUS_RST",	"PCIE_PWR_EN",	"pca9555_20-10","pca9555_20-11", 	// 8-11
+			"pca9555_20-12","pca9555_20-13","pca9555_20-14","pca9555_20-15"; 	// 12-15
+
+		/* eth2's PHY (address 1 on eth0's shared MDIO bus) is unused by
+		 * design. Hold its reset asserted permanently to keep it
+		 * electrically silent on the shared MDIO/MDC bus; left un-reset,
+		 * it intermittently corrupts eth0's PHY resets on that shared bus. */
+		eth2-phy-reset-hog {
+			gpio-hog;
+			gpios = <2 GPIO_ACTIVE_LOW>;
+			output-high;
+			line-name = "eth2-phy-reset-hog";
+		};
+	};
+
+	ptn5110_51: tcpc@51 {
+		compatible = "nxp,ptn5110";
+		reg = <0x51>;
+		pinctrl-0 = <&ptn5110_51_pins>;
+		interrupt-parent = <&gpiog>;
+		interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
+		status = "okay";
+
+		usbc_a_con: connector {
+			compatible = "usb-c-connector";
+			label = "USB-C(A)";
+			power-role = "dual";
+			data-role = "dual";
+			try-power-role = "sink";
+			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+				     PDO_VAR(5000, 20000, 3000)>;
+			op-sink-microwatt = <15000000>;
+			self-powered;
+			status = "okay";
+
+			port {
+				typec_a_ep: endpoint {
+					remote-endpoint = <&dwc3_ep>;
+				};
+			};
+		};
+	};
+
+	ptn5110_52: tcpc@52 {
+		compatible = "nxp,ptn5110";
+		reg = <0x52>;
+		pinctrl-0 = <&ptn5110_52_pins>;
+		interrupt-parent = <&gpiob>;
+		interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
+		status = "okay";
+
+		usbc_c_con: connector {
+			compatible = "usb-c-connector";
+			label = "USB-C(C)";
+			power-role = "source";
+			data-role = "host";
+			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+			self-powered;
+			status = "okay";
+		};
+	};
+	/* USER CODE END i2c3 */
 };
 
 &i2c4 {
