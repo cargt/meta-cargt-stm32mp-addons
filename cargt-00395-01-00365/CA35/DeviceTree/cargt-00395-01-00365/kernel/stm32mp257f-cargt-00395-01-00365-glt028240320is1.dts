@@ -11,4 +11,5 @@
 
 / {
 	model = "Cargt STM32MP257F SOM (00395-01) on 00365 with 2.8 inch SPI TFT (GLT028240320IS1)";
+	compatible = "cargt,stm32mp257f-cargt-00395-01-00365-glt028240320is1", "cargt,stm32mp257f-cargt-00395-01-00365", "st,stm32mp257";
 };
